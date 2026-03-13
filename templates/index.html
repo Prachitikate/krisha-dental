@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block title %}Krisha Dental Clinic – Your Smile, Our Passion{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 hero-content">
+        <div class="hero-badge float-anim">
+          <div class="hero-badge-dot"></div>
+          Accepting New Patients
+        </div>
+        <h1 class="hero-title">Your Smile,<br><span>Our Passion</span></h1>
+        <p class="hero-sub">Trusted dental care in Nallasopara West. Gentle, affordable, and comprehensive dental services for the whole family — from kids to seniors.</p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{{ url_for('book_appointment') }}" class="btn-kd-primary btn">
+            <i class="bi bi-calendar-check me-2"></i>Book Appointment
+          </a>
+          <a href="{{ url_for('about') }}" class="btn-kd-outline btn">
+            Learn More <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num">2000+</div>
+            <div class="stat-label">Happy Patients</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">6+</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">6</div>
+            <div class="stat-label">Services</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-image-wrap position-relative">
+          <img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=800&q=80&fit=crop" alt="Dentist treating patient" loading="lazy"/>
+          <div class="hero-floating-card">
+            <div class="hero-float-icon"><i class="bi bi-shield-check"></i></div>
+            <div class="hero-float-text">
+              <div class="num">100%</div>
+              <div class="lbl">Painless Treatment</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="container">
+    <div class="text-center mb-5 fade-up">
+      <div class="section-badge">Why Choose Us</div>
+      <h2 class="section-title">World-Class Dental <span>Care</span></h2>
+      <p class="section-desc mx-auto mt-3">We combine advanced technology with a patient-first approach for the best dental experience.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 fade-up">
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><i class="bi bi-emoji-smile"></i></div>
+          <h5>Painless Treatment</h5>
+          <p>Using the latest anaesthetic techniques and gentle methods to ensure a completely painless dental experience for every patient.</p>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up">
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><i class="bi bi-cpu"></i></div>
+          <h5>Advanced Dental Technology</h5>
+          <p>State-of-the-art dental equipment including digital X-rays, modern sterilization, and the latest treatment tools for precise care.</p>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up">
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><i class="bi bi-person-check"></i></div>
+          <h5>Experienced Dental Care</h5>
+          <p>Our team of experienced dental professionals brings years of expertise and compassionate care to every appointment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+<section class="why-section">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 fade-up">
+        <div class="why-image">
+          <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&q=80&fit=crop" alt="Clean clinic interior" loading="lazy"/>
+        </div>
+      </div>
+      <div class="col-lg-6 fade-up">
+        <div class="section-badge">About Our Clinic</div>
+        <h2 class="section-title mb-4">Where <span>Healthy</span> Smiles Begin</h2>
+        <p style="color:var(--text-mid);line-height:1.8;margin-bottom:28px;">Krisha Dental Clinic, located in Nallasopara West, is a trusted name in family dental care. We provide gentle, comprehensive, and affordable dental services for patients of all ages.</p>
+        <div class="why-item">
+          <div class="why-check"><i class="bi bi-check-lg"></i></div>
+          <div class="why-text"><h6>Strict Hygiene Protocols</h6><p>We maintain hospital-grade cleanliness and sterilization standards at all times.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="why-check"><i class="bi bi-check-lg"></i></div>
+          <div class="why-text"><h6>Affordable & Transparent Pricing</h6><p>No hidden fees. Clear pricing with flexible payment options for all treatments.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="why-check"><i class="bi bi-check-lg"></i></div>
+          <div class="why-text"><h6>Calm, Child-Friendly Environment</h6><p>A welcoming space designed to ease anxiety for patients of all ages, especially children.</p></div>
+        </div>
+        <a href="{{ url_for('about') }}" class="btn-kd-primary btn mt-3">Know More About Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES PREVIEW -->
+<section class="services-section">
+  <div class="container">
+    <div class="text-center mb-5 fade-up">
+      <div class="section-badge">What We Offer</div>
+      <h2 class="section-title">Our <span>Dental Services</span></h2>
+      <p class="section-desc mx-auto mt-3">Comprehensive dental care under one roof for the whole family.</p>
+    </div>
+    <div class="row g-4">
+      {% set services = [
+        ('bi-hammer','Dental Implants','Permanent tooth replacement solutions that look, feel, and function like natural teeth.'),
+        ('bi-stars','Cosmetic Dentistry','Teeth whitening, veneers, and smile makeovers to boost your confidence.'),
+        ('bi-activity','Root Canal Treatment','Painless root canal procedures to save your natural tooth and eliminate pain.'),
+        ('bi-circle-square','Crown, Bridge & Denture','Restore damaged or missing teeth with custom-fitted crowns, bridges and dentures.'),
+        ('bi-balloon-heart','Pediatric Dentistry','Specialized, gentle dental care designed specifically for children in a fun environment.'),
+        ('bi-diagram-3','Braces & Orthodontics','Straighten your teeth with traditional braces or modern invisible aligners.')
+      ] %}
+      {% for icon, name, desc in services %}
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="service-card">
+          <div class="service-icon"><i class="bi {{ icon }}"></i></div>
+          <h5>{{ name }}</h5>
+          <p>{{ desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-5 fade-up">
+      <a href="{{ url_for('services') }}" class="btn-kd-outline btn">View All Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- GOOGLE REVIEW -->
+<section style="padding:50px 0;background:var(--blue-ultra);">
+  <div class="container">
+    <div class="text-center">
+      <a href="https://maps.app.goo.gl/nwxHqqJDrRYqgTc38" target="_blank" class="btn btn-outline-primary rounded-pill px-5 py-3 fw-600" style="font-size:1rem;">
+        <i class="bi bi-google me-2"></i>Review Us on Google ⭐
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container text-center position-relative" style="z-index:2;">
+    <div class="fade-up">
+      <h2 class="mb-3">Ready to Get Your Perfect Smile?</h2>
+      <p class="mb-4">Book a FREE consultation today. Our experts are ready to help.</p>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="{{ url_for('book_appointment') }}" class="btn-kd-white btn">
+          <i class="bi bi-calendar-check me-2"></i>Book Free Consultation
+        </a>
+        <a href="tel:+919967628265" class="btn btn-outline-light rounded-pill px-4 py-3 fw-600">
+          <i class="bi bi-telephone me-2"></i>+91 9967628265
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a href="https://wa.me/919967628265" target="_blank" title="Chat on WhatsApp"
+   style="position:fixed;bottom:100px;right:24px;z-index:9999;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,0.4);text-decoration:none;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- CHATBOT -->
+<div id="chatBox" style="display:none;position:fixed;bottom:170px;right:24px;z-index:9999;width:320px;flex-direction:column;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.18);">
+  <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="color:white;font-weight:700;font-size:0.95rem;">🦷 Krisha Dental Assistant</div>
+      <div style="color:rgba(255,255,255,0.8);font-size:0.75rem;">Ask me anything!</div>
+    </div>
+    <button onclick="toggleChat()" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">✕</button>
+  </div>
+  <div id="chatMessages" style="background:white;padding:14px;height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;">
+    <div style="text-align:left;margin-bottom:10px;">
+      <span style="background:#f0f4ff;color:#1e293b;padding:8px 14px;border-radius:18px 18px 18px 4px;display:inline-block;font-size:0.85rem;max-width:85%;">Hello! I am Krisha Dental Assistant. How can I help you? 😊</span>
+    </div>
+  </div>
+  <div style="background:#f8faff;padding:8px 12px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid #e5e7eb;">
+    <button onclick="sendChatMessage('timing')" style="background:white;border:1.5px solid #3b82f6;color:#1e40af;border-radius:20px;padding:4px 10px;font-size:0.75rem;cursor:pointer;">⏰ Timing</button>
+    <button onclick="sendChatMessage('location')" style="background:white;border:1.5px solid #3b82f6;color:#1e40af;border-radius:20px;padding:4px 10px;font-size:0.75rem;cursor:pointer;">📍 Location</button>
+    <button onclick="sendChatMessage('services')" style="background:white;border:1.5px solid #3b82f6;color:#1e40af;border-radius:20px;padding:4px 10px;font-size:0.75rem;cursor:pointer;">🦷 Services</button>
+    <button onclick="sendChatMessage('fees')" style="background:white;border:1.5px solid #3b82f6;color:#1e40af;border-radius:20px;padding:4px 10px;font-size:0.75rem;cursor:pointer;">💰 Fees</button>
+    <button onclick="sendChatMessage('appointment')" style="background:white;border:1.5px solid #3b82f6;color:#1e40af;border-radius:20px;padding:4px 10px;font-size:0.75rem;cursor:pointer;">📅 Appointment</button>
+    <button onclick="sendChatMessage('contact')" style="background:white;border:1.5px solid #3b82f6;color:#1e40af;border-radius:20px;padding:4px 10px;font-size:0.75rem;cursor:pointer;">📞 Contact</button>
+  </div>
+  <div style="background:white;padding:10px 12px;display:flex;gap:8px;border-top:1px solid #e5e7eb;">
+    <input id="chatInput" type="text" placeholder="Type here..." style="flex:1;border:1.5px solid #e5e7eb;border-radius:20px;padding:8px 14px;font-size:0.85rem;outline:none;">
+    <button onclick="sendChatMessage()" style="background:#1e40af;border:none;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+      <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- CHAT TOGGLE BUTTON -->
+<button onclick="toggleChat()" title="Chat with us"
+  style="position:fixed;bottom:36px;right:24px;z-index:9999;width:56px;height:56px;background:linear-gradient(135deg,#1e40af,#3b82f6);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(30,64,175,0.4);cursor:pointer;">
+  <i class="bi bi-chat-dots-fill" style="color:white;font-size:1.4rem;"></i>
+</button>
+
+{% endblock %}

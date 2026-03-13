@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Admin Login – Krisha Dental Clinic{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="auth-page" style="padding-top:0;margin-top:-72px;background:linear-gradient(135deg,#0a2342 0%,#0a4f8f 50%,#1565C0 100%);">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="icon" style="background:linear-gradient(135deg,#0a2342,#1565C0);"><i class="bi bi-shield-lock-fill"></i></div>
+      <h2>Admin Portal</h2>
+      <p>Krisha Dental Clinic Management System</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('admin_login') }}" onsubmit="return validateLoginForm();" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="email">Admin Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="admin@krishadental.com" autocomplete="email"/>
+      </div>
+      <div class="mb-4">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-group">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter admin password"/>
+          <button type="button" class="btn btn-outline-secondary toggle-pw" data-target="#password">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn w-100 py-3 fw-700" style="background:linear-gradient(135deg,#0a2342,#1565C0);color:white;border:none;border-radius:50px;font-size:1rem;">
+        <i class="bi bi-shield-check me-2"></i>Access Admin Dashboard
+      </button>
+    </form>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('patient_login') }}" style="font-size:0.82rem;color:var(--text-light);text-decoration:none;">
+        <i class="bi bi-person me-1"></i>Patient Login instead
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

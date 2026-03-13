@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard – Krisha Dental Clinic{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-page" style="padding-top:90px;">
+  <div class="container">
+
+    <!-- APPROVED POPUP MODAL -->
+    {% for a in new_approved %}
+    <div class="modal fade" id="approvedModal{{ loop.index }}" tabindex="-1" data-bs-backdrop="static">
+      <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content" style="border-radius:20px;border:none;text-align:center;padding:30px 20px;">
+          <div style="font-size:3rem;margin-bottom:10px;">🎉</div>
+          <h4 style="color:#1e40af;font-weight:800;margin-bottom:8px;">Appointment Approved!</h4>
+          <p style="color:#64748b;margin-bottom:20px;">Your <strong>{{ a['reason'] }}</strong> appointment has been confirmed!</p>
+          <div style="background:#f0f6ff;border-radius:12px;padding:16px;margin-bottom:20px;">
+            <div style="font-size:1rem;font-weight:700;color:#1e293b;">
+              📅 {{ a['appointment_date'] }} &nbsp;|&nbsp; ⏰ {{ a['appointment_time'] }}
+            </div>
+            <div style="color:#64748b;margin-top:6px;">📍 {{ a['branch'] }}</div>
+          </div>
+          <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:20px;">Please arrive 10 minutes early. 😊</p>
+          <button type="button" class="btn btn-primary rounded-pill px-5 py-2 fw-700" data-bs-dismiss="modal" style="font-size:1rem;">OK, Got it! ✓</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        new bootstrap.Modal(document.getElementById('approvedModal{{ loop.index }}')).show();
+      });
+    </script>
+    {% endfor %}
+
+    <!-- HEADER -->
+    <div class="dash-header fade-up">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+          <h4><i class="bi bi-person-circle me-2"></i>Welcome, {{ patient['name'] }}!</h4>
+          <p>Here is your appointment overview.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="{{ url_for('book_appointment') }}" class="btn btn-light rounded-pill px-4 fw-600" style="font-size:0.875rem;">
+            <i class="bi bi-plus-circle me-1"></i>Book New Appointment
+          </a>
+          <a href="/patient-logout" class="btn btn-danger rounded-pill px-4" style="font-size:0.875rem;position:relative;z-index:9999;">
+            <i class="bi bi-box-arrow-right me-1"></i>Logout
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="row g-3 mb-4">
+      {% set total = upcoming|length + history|length %}
+      {% set pending_count = upcoming|selectattr('status','equalto','Pending')|list|length %}
+      <div class="col-6 col-md-3 fade-up">
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:#dbeafe;color:#1e40af;"><i class="bi bi-calendar-check"></i></div>
+          <div class="stat-card-num">{{ total }}</div>
+          <div class="stat-card-lbl">Total Appointments</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 fade-up">
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:#fef3c7;color:#92400e;"><i class="bi bi-hourglass-split"></i></div>
+          <div class="stat-card-num">{{ pending_count }}</div>
+          <div class="stat-card-lbl">Pending</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 fade-up">
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:#d1fae5;color:#065f46;"><i class="bi bi-check-circle"></i></div>
+          <div class="stat-card-num">{{ history|selectattr('status','equalto','Completed')|list|length }}</div>
+          <div class="stat-card-lbl">Completed</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 fade-up">
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:#e0e7ff;color:#3730a3;"><i class="bi bi-calendar3"></i></div>
+          <div class="stat-card-num">{{ upcoming|length }}</div>
+          <div class="stat-card-lbl">Upcoming</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPCOMING APPOINTMENTS -->
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <h5 class="fw-700 mb-3" style="color:var(--text-dark);"><i class="bi bi-calendar-event me-2 text-primary"></i>Upcoming Appointments</h5>
+
+        {% if upcoming %}
+          {% for a in upcoming %}
+          <div class="appt-card status-{{ a['status'] }} fade-up">
+            <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+              <div>
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="badge-status badge-{{ a['status'] }}">
+                    <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i>
+                    {{ a['status'] }}
+                  </span>
+                </div>
+                <h6 style="font-weight:700;color:var(--text-dark);margin-bottom:8px;">{{ a['reason'] }}</h6>
+                <div class="d-flex flex-wrap gap-3">
+                  <span style="font-size:0.83rem;color:var(--text-mid);"><i class="bi bi-calendar3 me-1 text-primary"></i>{{ a['appointment_date'] }}</span>
+                  <span style="font-size:0.83rem;color:var(--text-mid);"><i class="bi bi-clock me-1 text-primary"></i>{{ a['appointment_time'] }}</span>
+                  <span style="font-size:0.83rem;color:var(--text-mid);"><i class="bi bi-geo-alt me-1 text-primary"></i>{{ a['branch'] }}</span>
+                </div>
+                {% if a['status'] == 'Pending' %}
+                <p style="font-size:0.8rem;color:#92400e;margin-top:10px;margin-bottom:0;"><i class="bi bi-info-circle me-1"></i>Your appointment is awaiting confirmation from our team.</p>
+                {% elif a['status'] == 'Approved' %}
+                <p style="font-size:0.8rem;color:#1e40af;margin-top:10px;margin-bottom:0;"><i class="bi bi-check-circle me-1"></i>Your appointment is confirmed! Please arrive 10 minutes early.</p>
+                {% elif a['status'] == 'Rescheduled' %}
+                <p style="font-size:0.8rem;color:#9a3412;margin-top:10px;margin-bottom:0;"><i class="bi bi-arrow-repeat me-1"></i>Your appointment has been rescheduled to a new date/time.</p>
+                {% endif %}
+              </div>
+              <div style="font-size:0.75rem;color:var(--text-light);">Ref #{{ a['id'] }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div style="background:white;border-radius:var(--radius-md);padding:48px;text-align:center;box-shadow:var(--shadow-sm);">
+            <i class="bi bi-calendar-x" style="font-size:2.5rem;color:var(--blue-light);"></i>
+            <h6 style="font-weight:700;color:var(--text-dark);margin-top:16px;">No Upcoming Appointments</h6>
+            <p style="font-size:0.875rem;color:var(--text-light);">Book your next appointment to get started.</p>
+            <a href="{{ url_for('book_appointment') }}" class="btn-kd-primary btn mt-2">Book Appointment</a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="col-lg-4">
+        <div style="background:white;border-radius:var(--radius-md);padding:24px;box-shadow:var(--shadow-sm);margin-bottom:20px;">
+          <h6 style="font-weight:700;color:var(--text-dark);margin-bottom:16px;"><i class="bi bi-person me-2 text-primary"></i>My Profile</h6>
+          <div style="font-size:0.85rem;color:var(--text-mid);line-height:2;">
+            <div><i class="bi bi-person-fill me-2 text-primary"></i><strong>{{ patient['name'] }}</strong></div>
+            <div><i class="bi bi-envelope-fill me-2 text-primary"></i>{{ patient['email'] }}</div>
+            <div><i class="bi bi-telephone-fill me-2 text-primary"></i>{{ patient['mobile'] }}</div>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg,var(--blue-main),var(--blue-light));border-radius:var(--radius-md);padding:24px;color:white;">
+          <h6 style="font-weight:700;margin-bottom:12px;"><i class="bi bi-telephone me-2"></i>Need Help?</h6>
+          <p style="font-size:0.83rem;color:rgba(255,255,255,0.85);margin-bottom:14px;">Call us to reschedule or inquire about your appointment.</p>
+          <a href="tel:+919967628265" style="display:block;background:rgba(255,255,255,0.2);border-radius:8px;padding:10px;color:white;text-decoration:none;font-weight:700;font-size:0.9rem;text-align:center;">
+            <i class="bi bi-telephone me-1"></i>+91 9967628265
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY TABLE WITH FILTER -->
+    {% if history %}
+    <div class="kd-table-wrap mt-4 fade-up">
+      <h5 class="fw-700 mb-3" style="color:var(--text-dark);"><i class="bi bi-clock-history me-2 text-primary"></i>Past Appointments</h5>
+      <!-- FILTER -->
+      <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+        <input type="text" id="patHistSearch" class="form-control" placeholder="Search by treatment..." style="max-width:220px;border-radius:20px;">
+        <select id="patHistStatus" class="form-select" style="max-width:160px;border-radius:20px;">
+          <option value="">All Status</option>
+          <option value="Completed">Completed</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <button class="btn btn-outline-secondary rounded-pill px-3" onclick="resetPatFilter()">Reset</button>
+      </div>
+      <div class="table-responsive">
+        <table class="table kd-table" id="patHistTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Treatment</th>
+              <th>Branch</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in history %}
+            <tr>
+              <td>{{ a['id'] }}</td>
+              <td>{{ a['appointment_date'] }}</td>
+              <td>{{ a['appointment_time'] }}</td>
+              <td>{{ a['reason'] }}</td>
+              <td>{{ a['branch'] }}</td>
+              <td><span class="badge-status badge-{{ a['status'] }}">{{ a['status'] }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<script>
+function filterPatHist() {
+  const search = document.getElementById('patHistSearch').value.toLowerCase();
+  const status = document.getElementById('patHistStatus').value.toLowerCase();
+  document.querySelectorAll('#patHistTable tbody tr').forEach(row => {
+    const treatment = row.cells[3]?.textContent.toLowerCase() || '';
+    const rowStatus = row.cells[5]?.textContent.trim().toLowerCase() || '';
+    const matchSearch = !search || treatment.includes(search);
+    const matchStatus = !status || rowStatus.includes(status);
+    row.style.display = (matchSearch && matchStatus) ? '' : 'none';
+  });
+}
+function resetPatFilter() {
+  document.getElementById('patHistSearch').value = '';
+  document.getElementById('patHistStatus').value = '';
+  filterPatHist();
+}
+document.getElementById('patHistSearch')?.addEventListener('input', filterPatHist);
+document.getElementById('patHistStatus')?.addEventListener('change', filterPatHist);
+</script>
+{% endblock %}

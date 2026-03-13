@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Patient Login – Krisha Dental Clinic{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="auth-page" style="padding-top:0;margin-top:-72px;">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="icon"><i class="bi bi-person-circle"></i></div>
+      <h2>Patient Login</h2>
+      <p>Access your appointments and health records</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('patient_login') }}" onsubmit="return validateLoginForm();" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="email">Email Address</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com" autocomplete="email"/>
+      </div>
+      <div class="mb-4">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-group">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" autocomplete="current-password"/>
+          <button type="button" class="btn btn-outline-secondary toggle-pw" data-target="#password">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn-kd-primary btn w-100">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Login to Dashboard
+      </button>
+    </form>
+
+    <div class="auth-divider"><hr/><span>Don't have an account?</span><hr/></div>
+
+    <a href="{{ url_for('patient_register') }}" class="btn-kd-outline btn w-100">
+      <i class="bi bi-person-plus me-2"></i>Register as New Patient
+    </a>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('book_appointment') }}" style="font-size:0.82rem;color:var(--text-light);text-decoration:none;">
+        <i class="bi bi-calendar-plus me-1"></i>Book appointment without login
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

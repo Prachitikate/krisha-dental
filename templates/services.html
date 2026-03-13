@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Our Services – Krisha Dental Clinic{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <div class="container position-relative" style="z-index:2;">
+    <div class="section-badge">What We Offer</div>
+    <h1>Our Dental <span>Services</span></h1>
+    <p class="mt-3 mx-auto" style="max-width:540px;">Safe, gentle, and personalized dental care for the whole family.</p>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section style="padding:60px 0 30px;background:white;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center fade-up">
+        <p style="font-size:1.05rem;color:var(--text-mid);line-height:1.9;">At Krisha Dental Clinic, we believe in providing safe, gentle, and personalized dental care for the whole family. Our comprehensive range of services ensures that every member of your family receives the best oral healthcare under one roof.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES CARDS -->
+<section class="services-section pt-0" style="padding-top:20px!important;">
+  <div class="container">
+    <div class="row g-4">
+
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="service-card">
+          <div class="service-icon"><i class="bi bi-hammer"></i></div>
+          <h5>Dental Implants</h5>
+          <p>Permanent, natural-looking tooth replacement solutions. Our implants are placed with precision to restore full chewing function and a beautiful smile that lasts a lifetime.</p>
+          <ul style="text-align:left;color:var(--text-light);font-size:0.82rem;margin-top:12px;padding-left:18px;">
+            <li>Single tooth implants</li>
+            <li>Full mouth rehabilitation</li>
+            <li>Implant-supported dentures</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="service-card">
+          <div class="service-icon"><i class="bi bi-stars"></i></div>
+          <h5>Cosmetic Dentistry</h5>
+          <p>Transform your smile with our cosmetic dental procedures. We offer teeth whitening, porcelain veneers, bonding, and complete smile makeovers tailored to your needs.</p>
+          <ul style="text-align:left;color:var(--text-light);font-size:0.82rem;margin-top:12px;padding-left:18px;">
+            <li>Teeth whitening</li>
+            <li>Veneers & bonding</li>
+            <li>Smile makeover</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="service-card">
+          <div class="service-icon"><i class="bi bi-activity"></i></div>
+          <h5>Root Canal Treatment</h5>
+          <p>Save your natural tooth with our painless root canal procedures. Using modern rotary techniques and effective anaesthesia, we eliminate infection and restore your tooth's health.</p>
+          <ul style="text-align:left;color:var(--text-light);font-size:0.82rem;margin-top:12px;padding-left:18px;">
+            <li>Single-visit RCT</li>
+            <li>Re-treatment of failed RCT</li>
+            <li>Post & core build-up</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="service-card">
+          <div class="service-icon"><i class="bi bi-circle-square"></i></div>
+          <h5>Crown, Bridge & Denture</h5>
+          <p>Restore damaged or missing teeth with custom-fitted dental restorations. Our crowns, bridges, and dentures are crafted for maximum comfort, function, and aesthetics.</p>
+          <ul style="text-align:left;color:var(--text-light);font-size:0.82rem;margin-top:12px;padding-left:18px;">
+            <li>Ceramic & zirconia crowns</li>
+            <li>Fixed & removable bridges</li>
+            <li>Partial & full dentures</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="service-card">
+          <div class="service-icon"><i class="bi bi-balloon-heart"></i></div>
+          <h5>Pediatric Dentistry</h5>
+          <p>Specialized dental care designed for children in a fun, friendly environment. We help kids develop healthy oral habits while making their dental visits enjoyable and anxiety-free.</p>
+          <ul style="text-align:left;color:var(--text-light);font-size:0.82rem;margin-top:12px;padding-left:18px;">
+            <li>Child-friendly check-ups</li>
+            <li>Fluoride treatments</li>
+            <li>Space maintainers</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="service-card">
+          <div class="service-icon"><i class="bi bi-diagram-3"></i></div>
+          <h5>Braces & Orthodontics</h5>
+          <p>Straighten misaligned teeth and correct bite issues with our orthodontic solutions. We offer traditional metal braces, ceramic braces, and modern clear aligners for all ages.</p>
+          <ul style="text-align:left;color:var(--text-light);font-size:0.82rem;margin-top:12px;padding-left:18px;">
+            <li>Metal & ceramic braces</li>
+            <li>Clear/invisible aligners</li>
+            <li>Retainers</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ADDITIONAL INFO -->
+<section style="padding:70px 0;background:var(--blue-ultra);">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 fade-up">
+        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=700&q=80&fit=crop" alt="Dental instruments" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);"/>
+      </div>
+      <div class="col-lg-6 fade-up">
+        <div class="section-badge">Also Available</div>
+        <h2 class="section-title mb-4">More <span>Treatments</span></h2>
+        <div class="row g-3">
+          {% for s in ['Routine Check-up & Cleaning','Tooth Extractions','Dental X-rays','Teeth Sensitivity Treatment','Gum Disease Treatment','Emergency Dental Care'] %}
+          <div class="col-6">
+            <div style="background:white;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-sm);">
+              <i class="bi bi-check-circle-fill" style="color:var(--blue-main);"></i>
+              <span style="font-size:0.85rem;font-weight:500;color:var(--text-dark);">{{ s }}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <a href="{{ url_for('book_appointment') }}" class="btn-kd-primary btn mt-4">Book an Appointment</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container text-center position-relative" style="z-index:2;">
+    <div class="fade-up">
+      <h2>Not Sure Which Treatment You Need?</h2>
+      <p class="mt-2 mb-4">Book a FREE consultation and our experts will guide you to the right solution.</p>
+      <a href="{{ url_for('book_appointment') }}" class="btn-kd-white btn">
+        <i class="bi bi-calendar-check me-2"></i>Book FREE Consultation
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

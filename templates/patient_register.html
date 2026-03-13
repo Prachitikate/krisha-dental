@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Register – Krisha Dental Clinic{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="auth-page" style="padding-top:0;margin-top:-72px;">
+  <div class="auth-card" style="max-width:480px;">
+    <div class="auth-logo">
+      <div class="icon"><i class="bi bi-person-plus"></i></div>
+      <h2>Create Account</h2>
+      <p>Register as a new patient at Krisha Dental Clinic</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('patient_register') }}" onsubmit="return validateRegisterForm();" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="name">Full Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name"/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="email">Email Address</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com"/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="mobile">Mobile Number</label>
+        <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="10-digit mobile number"/>
+      </div>
+      <div class="mb-4">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-group">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Minimum 6 characters"/>
+          <button type="button" class="btn btn-outline-secondary toggle-pw" data-target="#password">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn-kd-primary btn w-100">
+        <i class="bi bi-person-check me-2"></i>Create Account
+      </button>
+    </form>
+
+    <div class="auth-divider"><hr/><span>Already registered?</span><hr/></div>
+    <a href="{{ url_for('patient_login') }}" class="btn-kd-outline btn w-100">
+      <i class="bi bi-box-arrow-in-right me-2"></i>Login to Your Account
+    </a>
+  </div>
+</div>
+{% endblock %}

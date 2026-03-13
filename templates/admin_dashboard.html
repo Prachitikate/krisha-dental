@@ -1,0 +1,426 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard – Krisha Dental Clinic{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-page" style="padding-top:20px;">
+  <div class="container-fluid px-4">
+
+    <!-- HEADER -->
+    <div class="dash-header mb-4">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+          <h4><i class="bi bi-shield-check me-2"></i>Admin Dashboard</h4>
+          <p>Krisha Dental Clinic – Appointment Management | Today: {{ today }}</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+          <button class="btn btn-light rounded-pill px-3" style="font-size:0.82rem;" data-bs-toggle="modal" data-bs-target="#addApptModal">
+            <i class="bi bi-plus-circle me-1"></i>Add Appointment
+          </button>
+          <a href="/admin-logout" class="btn btn-danger rounded-pill px-3" style="font-size:0.82rem;position:relative;z-index:9999;">
+            <i class="bi bi-box-arrow-right me-1"></i>Logout
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="row g-3 mb-4">
+      {% set stat_items = [
+        ('Total Appointments', stats.total, 'bi-calendar-check', '#dbeafe', '#1e40af'),
+        ("Today's Appointments", stats.today, 'bi-calendar-day', '#d1fae5', '#065f46'),
+        ('Pending', stats.pending, 'bi-hourglass-split', '#fef3c7', '#92400e'),
+        ('Completed', stats.completed, 'bi-check-circle', '#d1fae5', '#065f46'),
+        ('Rescheduled', stats.rescheduled, 'bi-arrow-repeat', '#fed7aa', '#9a3412'),
+        ('Cancelled', stats.cancelled, 'bi-x-circle', '#f3f4f6', '#6b7280')
+      ] %}
+      {% for label, val, icon, bg, col in stat_items %}
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="stat-card text-center">
+          <div class="stat-card-icon mx-auto" style="background:{{ bg }};color:{{ col }};"><i class="bi {{ icon }}"></i></div>
+          <div class="stat-card-num">{{ val }}</div>
+          <div class="stat-card-lbl">{{ label }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- TABS -->
+    <ul class="nav nav-pills mb-4 gap-2" id="adminTabs">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#todayTab">Today's Appointments <span class="badge bg-primary ms-1">{{ stats.today }}</span></button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#allTab">All Appointments <span class="badge bg-secondary ms-1">{{ stats.total }}</span></button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pastTab">Past Appointments <span class="badge bg-warning ms-1">{{ past_count }}</span></button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#patientsTab">Patients</button></li>
+    </ul>
+
+    <div class="tab-content">
+
+      <!-- TODAY'S APPOINTMENTS -->
+      <div class="tab-pane fade show active" id="todayTab">
+        <div class="kd-table-wrap">
+          <h6 class="fw-700 mb-3" style="color:var(--text-dark);">Today's Appointments – {{ today }}</h6>
+          {% if today_appts %}
+          <div class="table-responsive">
+            <table class="table kd-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Patient Name</th>
+                  <th>Mobile</th>
+                  <th>Time</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for a in today_appts %}
+                <tr>
+                  <td>{{ a['id'] }}</td>
+                  <td><strong>{{ a['name'] }}</strong></td>
+                  <td>{{ a['mobile'] }}</td>
+                  <td>{{ a['appointment_time'] }}</td>
+                  <td>{{ a['reason'] }}</td>
+                  <td><span class="badge-status badge-{{ a['status'] }}">{{ a['status'] }}</span></td>
+                  <td>
+                    <div class="d-flex gap-1 flex-wrap">
+                      {% if a['status'] not in ['Completed','Rejected','Cancelled'] %}
+                      <form method="POST" action="{{ url_for('update_status', appt_id=a['id']) }}" style="display:inline;">
+                        <input type="hidden" name="status" value="Approved"/>
+                        <button type="submit" class="action-btn btn-approve">Approve</button>
+                      </form>
+                      <form method="POST" action="{{ url_for('update_status', appt_id=a['id']) }}" style="display:inline;">
+                        <input type="hidden" name="status" value="Completed"/>
+                        <button type="submit" class="action-btn btn-complete">Complete</button>
+                      </form>
+                      <form method="POST" action="{{ url_for('update_status', appt_id=a['id']) }}" style="display:inline;">
+                        <input type="hidden" name="status" value="Rejected"/>
+                        <button type="submit" class="action-btn btn-reject">Reject</button>
+                      </form>
+                      <form method="POST" action="{{ url_for('update_status', appt_id=a['id']) }}" style="display:inline;">
+                        <input type="hidden" name="status" value="Cancelled"/>
+                        <button type="submit" class="action-btn btn-cancel">Cancel</button>
+                      </form>
+                      <button class="action-btn btn-reschedule" onclick="openRescheduleModal({{ a['id'] }})">Reschedule</button>
+                      {% endif %}
+                      <button class="action-btn" style="background:#e0e7ff;color:#3730a3;"
+                        onclick="openDetailsModal({name:'{{ a['name'] }}',mobile:'{{ a['mobile'] }}',email:'{{ a['email'] }}',date:'{{ a['appointment_date'] }}',time:'{{ a['appointment_time'] }}',reason:'{{ a['reason'] }}',branch:'{{ a['branch'] }}',status:'{{ a['status'] }}',created_at:'{{ a['created_at'] }}'})">
+                        Details
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="text-center py-5">
+            <i class="bi bi-calendar-x" style="font-size:2.5rem;color:var(--blue-light);"></i>
+            <p class="mt-3" style="color:var(--text-light);">No appointments scheduled for today.</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- ALL APPOINTMENTS -->
+      <div class="tab-pane fade" id="allTab">
+        <div class="kd-table-wrap">
+          <h6 class="fw-700 mb-3" style="color:var(--text-dark);">All Appointments</h6>
+          <div class="table-responsive">
+            <table class="table kd-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Patient Name</th>
+                  <th>Mobile</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for a in all_appts %}
+                <tr>
+                  <td>{{ a['id'] }}</td>
+                  <td><strong>{{ a['name'] }}</strong></td>
+                  <td>{{ a['mobile'] }}</td>
+                  <td>{{ a['appointment_date'] }}</td>
+                  <td>{{ a['appointment_time'] }}</td>
+                  <td>{{ a['reason'] }}</td>
+                  <td><span class="badge-status badge-{{ a['status'] }}">{{ a['status'] }}</span></td>
+                  <td>
+                    <div class="d-flex gap-1 flex-wrap">
+                      {% if a['status'] not in ['Completed','Rejected','Cancelled'] %}
+                      <form method="POST" action="{{ url_for('update_status', appt_id=a['id']) }}" style="display:inline;">
+                        <input type="hidden" name="status" value="Approved"/>
+                        <button type="submit" class="action-btn btn-approve">Approve</button>
+                      </form>
+                      <form method="POST" action="{{ url_for('update_status', appt_id=a['id']) }}" style="display:inline;">
+                        <input type="hidden" name="status" value="Completed"/>
+                        <button type="submit" class="action-btn btn-complete">Complete</button>
+                      </form>
+                      <form method="POST" action="{{ url_for('update_status', appt_id=a['id']) }}" style="display:inline;">
+                        <input type="hidden" name="status" value="Rejected"/>
+                        <button type="submit" class="action-btn btn-reject">Reject</button>
+                      </form>
+                      <form method="POST" action="{{ url_for('update_status', appt_id=a['id']) }}" style="display:inline;">
+                        <input type="hidden" name="status" value="Cancelled"/>
+                        <button type="submit" class="action-btn btn-cancel">Cancel</button>
+                      </form>
+                      <button class="action-btn btn-reschedule" onclick="openRescheduleModal({{ a['id'] }})">Reschedule</button>
+                      {% endif %}
+                      <button class="action-btn" style="background:#e0e7ff;color:#3730a3;"
+                        onclick="openDetailsModal({name:'{{ a['name'] }}',mobile:'{{ a['mobile'] }}',email:'{{ a['email'] }}',date:'{{ a['appointment_date'] }}',time:'{{ a['appointment_time'] }}',reason:'{{ a['reason'] }}',branch:'{{ a['branch'] }}',status:'{{ a['status'] }}',created_at:'{{ a['created_at'] }}'})">
+                        Details
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATIENTS -->
+      <div class="tab-pane fade" id="patientsTab">
+        <div class="kd-table-wrap">
+          <h6 class="fw-700 mb-3" style="color:var(--text-dark);">Registered Patients</h6>
+          <!-- FILTER -->
+          <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+            <input type="text" id="patSearch" class="form-control" placeholder="Search by patient name..." style="max-width:260px;border-radius:20px;">
+            <button class="btn btn-outline-secondary rounded-pill px-3" onclick="resetPatSearch()">Reset</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table kd-table" id="patientsTable">
+              <thead>
+                <tr><th>#</th><th>Name</th><th>Email</th><th>Mobile</th></tr>
+              </thead>
+              <tbody>
+                {% for p in all_patients %}
+                <tr>
+                  <td>{{ p['id'] }}</td>
+                  <td><strong>{{ p['name'] }}</strong></td>
+                  <td>{{ p['email'] }}</td>
+                  <td>{{ p['mobile'] }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+<script>
+function filterPatients() {
+  const search = document.getElementById('patSearch').value.toLowerCase();
+  document.querySelectorAll('#patientsTable tbody tr').forEach(row => {
+    const name = row.cells[1]?.textContent.toLowerCase() || '';
+    row.style.display = (!search || name.includes(search)) ? '' : 'none';
+  });
+}
+function resetPatSearch() {
+  document.getElementById('patSearch').value = '';
+  filterPatients();
+}
+document.getElementById('patSearch')?.addEventListener('input', filterPatients);
+</script>
+
+      <!-- PAST APPOINTMENTS TAB -->
+      <div class="tab-pane fade" id="pastTab">
+        <div class="kd-table-wrap">
+          <h6 class="fw-700 mb-3" style="color:var(--text-dark);"><i class="bi bi-clock-history me-2 text-primary"></i>Past Appointments</h6>
+          <!-- FILTERS -->
+          <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+            <input type="text" id="pastSearch" class="form-control" placeholder="Search by patient name..." style="max-width:220px;border-radius:20px;">
+            <select id="pastStatus" class="form-select" style="max-width:160px;border-radius:20px;">
+              <option value="">All Status</option>
+              <option value="Completed">Completed</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Cancelled">Cancelled</option>
+              <option value="Rescheduled">Rescheduled</option>
+            </select>
+            <input type="date" id="pastDate" class="form-control" style="max-width:160px;border-radius:20px;">
+            <button class="btn btn-outline-secondary rounded-pill px-3" onclick="resetPastFilter()">Reset</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table kd-table" id="pastTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Patient Name</th>
+                  <th>Mobile</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for a in past_appts %}
+                <tr>
+                  <td>{{ a['id'] }}</td>
+                  <td><strong>{{ a['name'] }}</strong></td>
+                  <td>{{ a['mobile'] }}</td>
+                  <td>{{ a['appointment_date'] }}</td>
+                  <td>{{ a['appointment_time'] }}</td>
+                  <td>{{ a['reason'] }}</td>
+                  <td><span class="badge-status badge-{{ a['status'] }}">{{ a['status'] }}</span></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="text-center text-muted py-4">No past appointments found.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-content -->
+
+<script>
+function filterPast() {
+  const search = document.getElementById('pastSearch').value.toLowerCase();
+  const status = document.getElementById('pastStatus').value.toLowerCase();
+  const date   = document.getElementById('pastDate').value;
+  document.querySelectorAll('#pastTable tbody tr').forEach(row => {
+    const name      = row.cells[1]?.textContent.toLowerCase() || '';
+    const rowDate   = row.cells[3]?.textContent.trim() || '';
+    const rowStatus = row.cells[6]?.textContent.trim().toLowerCase() || '';
+    const matchSearch = !search || name.includes(search);
+    const matchStatus = !status || rowStatus.includes(status);
+    const matchDate   = !date || rowDate === date;
+    row.style.display = (matchSearch && matchStatus && matchDate) ? '' : 'none';
+  });
+}
+function resetPastFilter() {
+  document.getElementById('pastSearch').value = '';
+  document.getElementById('pastStatus').value = '';
+  document.getElementById('pastDate').value = '';
+  filterPast();
+}
+document.getElementById('pastSearch')?.addEventListener('input', filterPast);
+document.getElementById('pastStatus')?.addEventListener('change', filterPast);
+document.getElementById('pastDate')?.addEventListener('change', filterPast);
+</script>
+  </div>
+</div>
+
+<!-- RESCHEDULE MODAL -->
+<div class="modal fade" id="rescheduleModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-arrow-repeat me-2"></i>Reschedule Appointment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" id="rescheduleForm">
+        <input type="hidden" name="status" value="Rescheduled"/>
+        <input type="hidden" name="new_date" id="new_date_hidden"/>
+        <input type="hidden" name="new_time" id="new_time_hidden"/>
+        <input type="hidden" id="reschedule_appt_id"/>
+        <div class="modal-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-600">New Appointment Date</label>
+            <input type="date" class="form-control" id="new_date" onchange="document.getElementById('new_date_hidden').value=this.value;"/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-600">New Appointment Time</label>
+            <input type="time" class="form-control" id="new_time" onchange="document.getElementById('new_time_hidden').value=this.value;"/>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn-kd-primary btn" onclick="submitReschedule()">Confirm Reschedule</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- DETAILS MODAL -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-info-circle me-2"></i>Appointment Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4" id="detailsContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD APPOINTMENT MODAL -->
+<div class="modal fade" id="addApptModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Add New Appointment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ url_for('admin_add_appointment') }}">
+        <div class="modal-body p-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-600">Patient Name *</label>
+              <input type="text" class="form-control" name="name" required/>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600">Mobile *</label>
+              <input type="tel" class="form-control" name="mobile" required/>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600">Email *</label>
+              <input type="email" class="form-control" name="email" required/>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-600">Date *</label>
+              <input type="date" class="form-control" name="appointment_date" required/>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-600">Time *</label>
+              <input type="time" class="form-control" name="appointment_time" required/>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-600">Reason *</label>
+              <select class="form-select" name="reason" required>
+                <option value="">Select reason</option>
+                <option>Routine Checkup</option>
+                <option>Cleaning</option>
+                <option>Root Canal</option>
+                <option>Braces Consultation</option>
+                <option>Cosmetic Dentistry</option>
+                <option>Dental Implants</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn-kd-primary btn">Add Appointment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function submitReschedule() {
+  const id = document.getElementById('reschedule_appt_id').value;
+  const d  = document.getElementById('new_date').value;
+  const t  = document.getElementById('new_time').value;
+  if (!d || !t) { alert('Please select both date and time.'); return; }
+  const form = document.getElementById('rescheduleForm');
+  form.action = '/admin/update-status/' + id;
+  form.submit();
+}
+</script>
+{% endblock %}
