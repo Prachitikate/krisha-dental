@@ -9,11 +9,11 @@ app = Flask(__name__)
 app.secret_key = 'krisha_dental_secret_key_2024'
 
 DB_CONFIG = {
-    'host':'railway.mysql.railway.internal',
-    'user':'root',
-    'password':'kIrQZOaUPlWThTKsvdnlDDXMuMdgeSfE',
-    'database':'railway',
-    'port': 3306
+    'host':     'crossover.proxy.rlwy.net',
+    'user':     'root',
+    'password': 'kIrQZOaUPlWThTKsvdnlDDXMuMdgeSfE',
+    'database': 'railway',
+    'port':     41731
 }
 
 def get_db():
