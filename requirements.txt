@@ -1,4 +1,4 @@
 flask
 werkzeug
 mysql-connector-python
-echo "gunicorn" >> requirements.txt
+gunicorn
