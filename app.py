@@ -9,11 +9,11 @@ app = Flask(__name__)
 app.secret_key = 'krisha_dental_secret_key_2024'
 
 DB_CONFIG = {
-    'host':     'crossover.proxy.rlwy.net',
+    'host':     'mysql.railway.internal',
     'user':     'root',
-    'password': 'kIrQZOaUPlWThTKsvdnlDDXMuMdgeSfE',
+    'password': 'rcFvOipMxfiRhMIjzKHVRLUxtcUTByit',
     'database': 'railway',
-    'port':     41731
+    'port':     3306
 }
 
 def get_db():
@@ -334,4 +334,4 @@ def admin_add_appointment():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    app.run(debug=True)
